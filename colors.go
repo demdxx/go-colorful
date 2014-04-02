@@ -129,6 +129,11 @@ func (col Color) RGBA255() (r, g, b, a uint8) {
 	return
 }
 
+func (c Color) Complement() Color {
+	r, g, b, a := c.RGBA255()
+	return RGBA(~r, ~g, ~b, a)
+}
+
 // DistanceRgb computes the distance between two colors in RGB space.
 // This is not a good measure! Rather do it in Lab space.
 func (c1 Color) DistanceRgb(c2 Color) float64 {
@@ -175,6 +180,31 @@ func (c Color) IsEqualRGB(r, g, b float64) bool {
 
 func (c Color) IsEqualRGBA(r, g, b, a float64) bool {
 	return c.IsEqual(Color{r, g, b, a})
+}
+
+func (c Color) IsWebSafe() bool {
+	var x, y int8
+	r, g, b := c.RGB255()
+
+	// Red
+	x, y = (r >> 4) & 0x0f, r & 0x0f
+	if 0 != x % 3 || x != y {
+		return false
+	}
+
+	// Green
+	x, y = (g >> 4) & 0x0f, g & 0x0f
+	if 0 != x % 3 || x != y {
+		return false
+	}
+
+	// Blue
+	x, y = (b >> 4) & 0x0f, b & 0x0f
+	if 0 != x % 3 || x != y {
+		return false
+	}
+
+	return true
 }
 
 ///////////////////////////////////////////////////////////////////////////////
