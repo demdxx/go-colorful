@@ -1,5 +1,3 @@
-// This conceptual change port https://github.com/lucasb-eyer/go-colorful
-//
 // Copyright (c) 2014 Dmitry Ponomarev
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,24 +19,49 @@
 package colorful
 
 import (
-  "math/rand"
+  "bytes"
+  "testing"
 )
 
-// Uses the HSV color space to generate colors with similar S,V but distributed
-// evenly along their Hue. This is fast but not always pretty.
-// If you've got time to spare, use Lab (the non-fast below).
-func FastHappyPalette(colorsCount int) (colors []Color) {
-  colors = make([]Color, colorsCount)
+const cCount = 7
 
-  for i := 0; i < colorsCount; i++ {
-    colors[i] = ColorHsv{float64(i) * (360.0 / float64(colorsCount)), 0.8 + rand.Float64()*0.2, 0.65 + rand.Float64()*0.2}.Color()
-  }
-  return
+var c Color
+
+func TestInit(t *testing.T) {
+  c = FastWarmColor()
 }
 
-func HappyPalette(colorsCount int) ([]Color, error) {
-  pimpy := func(lab ColorLab) bool {
-    return 0.3 <= lab.Hcl().C && 0.4 <= lab.L && lab.L <= 0.8
+func TestComplementaryHarm(t *testing.T) {
+  printHarm(c.ComplementaryHarm(), t)
+}
+
+func TestAnalogousHarm(t *testing.T) {
+  printHarm(c.AnalogousHarm(cCount, 30), t)
+}
+
+func TestMonochromaticHarm(t *testing.T) {
+  printHarm(c.MonochromaticHarm(cCount), t)
+}
+
+func TestTriadHarm(t *testing.T) {
+  printHarm(c.TriadHarm(), t)
+}
+
+func TestSplitComplementaryHarm(t *testing.T) {
+  printHarm(c.SplitComplementaryHarm(), t)
+}
+
+func TestSquareHarm(t *testing.T) {
+  printHarm(c.SquareHarm(), t)
+}
+
+func printHarm(harm []Color, t *testing.T) {
+  var s bytes.Buffer
+  for _, color := range harm {
+    if s.Len() > 0 {
+      s.WriteString(", ")
+    }
+    s.WriteString(color.HexString())
   }
-  return SoftPaletteEx(colorsCount, SoftPaletteSettings{pimpy, 50, true})
+  t.Log(s.String())
 }

@@ -22,55 +22,55 @@
 package colorful
 
 import (
-	"math/rand"
+  "math/rand"
 )
 
 // Creates a random dark, "warm" color through a restricted HSV space.
 func FastWarmColor() Color {
-	return ColorHsv{
-		rand.Float64() * 360.0,
-		rand.Float64()*0.3 + 0.5,
-		rand.Float64()*0.3 + 0.3}.Color()
+  return ColorHsv{
+    rand.Float64() * 360.0,
+    rand.Float64()*0.3 + 0.5,
+    rand.Float64()*0.3 + 0.3}.Color()
 }
 
 // Creates a random dark, "warm" color through restricted HCL space.
 // This is slower than FastWarmColor but will likely give you colors which have
 // the same "warmness" if you run it many times.
 func WarmColor() (c Color) {
-	for c = randomWarm(); !c.IsValid(); c = randomWarm() {
-		// DUMMY LOOP BODY ...
-	}
-	return
+  for c = randomWarm(); !c.IsValid(); c = randomWarm() {
+    // DUMMY LOOP BODY ...
+  }
+  return
 }
 
 func randomWarm() Color {
-	return ColorHcl{
-		rand.Float64() * 360.0,
-		rand.Float64()*0.3 + 0.1,
-		rand.Float64()*0.3 + 0.2}.Color()
+  return ColorHcl{
+    rand.Float64() * 360.0,
+    rand.Float64()*0.3 + 0.1,
+    rand.Float64()*0.3 + 0.2}.Color()
 }
 
 // Creates a random bright, "pimpy" color through a restricted HSV space.
 func FastHappyColor() Color {
-	return ColorHsv{
-		rand.Float64() * 360.0,
-		rand.Float64()*0.3 + 0.7,
-		rand.Float64()*0.3 + 0.6}.Color()
+  return ColorHsv{
+    rand.Float64() * 360.0,
+    rand.Float64()*0.3 + 0.7,
+    rand.Float64()*0.3 + 0.6}.Color()
 }
 
 // Creates a random bright, "pimpy" color through restricted HCL space.
 // This is slower than FastHappyColor but will likely give you colors which
 // have the same "brightness" if you run it many times.
 func HappyColor() (c Color) {
-	for c = randomPimp(); !c.IsValid(); c = randomPimp() {
-		// DUMMY LOOP BODY ...
-	}
-	return
+  for c = randomPimp(); !c.IsValid(); c = randomPimp() {
+    // DUMMY LOOP BODY ...
+  }
+  return
 }
 
 func randomPimp() Color {
-	return ColorHcl{
-		rand.Float64() * 360.0,
-		rand.Float64()*0.3 + 0.5,
-		rand.Float64()*0.3 + 0.5}.Color()
+  return ColorHcl{
+    rand.Float64() * 360.0,
+    rand.Float64()*0.3 + 0.5,
+    rand.Float64()*0.3 + 0.5}.Color()
 }

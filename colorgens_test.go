@@ -21,55 +21,55 @@
 package colorful
 
 import (
-	"math/rand"
-	"testing"
-	"time"
+  "math/rand"
+  "testing"
+  "time"
 )
 
 // This is really difficult to test, if you've got a good idea, pull request!
 
 // Check if it returns all valid colors.
 func TestColorValidity(t *testing.T) {
-	test(t, false)
+  test(t, false)
 }
 
 // Checl and print table of colors
 func TestColorPrint(t *testing.T) {
-	test(t, true)
+  test(t, true)
 }
 
 func test(t *testing.T, printIt bool) {
-	seed := time.Now().UTC().UnixNano()
-	rand.Seed(seed)
+  seed := time.Now().UTC().UnixNano()
+  rand.Seed(seed)
 
-	for i := 0; i < 100; i++ {
-		c := ""
+  for i := 0; i < 100; i++ {
+    c := ""
 
-		if col := WarmColor(); !col.IsValid() {
-			t.Errorf("Warm color %v is not valid! Seed was: %v", col, seed)
-		} else if printIt {
-			c += col.HexString() + " / "
-		}
+    if col := WarmColor(); !col.IsValid() {
+      t.Errorf("Warm color %v is not valid! Seed was: %v", col, seed)
+    } else if printIt {
+      c += col.HexString() + " / "
+    }
 
-		if col := FastWarmColor(); !col.IsValid() {
-			t.Errorf("Fast warm color %v is not valid! Seed was: %v", col, seed)
-		} else if printIt {
-			c += col.HexString() + " / "
-		}
+    if col := FastWarmColor(); !col.IsValid() {
+      t.Errorf("Fast warm color %v is not valid! Seed was: %v", col, seed)
+    } else if printIt {
+      c += col.HexString() + " / "
+    }
 
-		if col := HappyColor(); !col.IsValid() {
-			t.Errorf("Happy color %v is not valid! Seed was: %v", col, seed)
-		} else if printIt {
-			c += col.HexString() + " / "
-		}
+    if col := HappyColor(); !col.IsValid() {
+      t.Errorf("Happy color %v is not valid! Seed was: %v", col, seed)
+    } else if printIt {
+      c += col.HexString() + " / "
+    }
 
-		if col := FastHappyColor(); !col.IsValid() {
-			t.Errorf("Fast happy color %v is not valid! Seed was: %v", col, seed)
-		} else if printIt {
-			c += col.HexString()
-		}
-		if printIt {
-			t.Logf("%3d) %v", i+1, c)
-		}
-	}
+    if col := FastHappyColor(); !col.IsValid() {
+      t.Errorf("Fast happy color %v is not valid! Seed was: %v", col, seed)
+    } else if printIt {
+      c += col.HexString()
+    }
+    if printIt {
+      t.Logf("%3d) %v", i+1, c)
+    }
+  }
 }
