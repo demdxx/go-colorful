@@ -20,7 +20,13 @@ package colorful
 
 import (
   "math"
+  "sort"
 )
+
+func (c Color) Complement() Color {
+  r, g, b, a := c.RGBA255()
+  return RGBA(^r, ^g, ^b, a)
+}
 
 func (c Color) ComplementaryHarm() []Color {
   return []Color{c, c.Complement()}
@@ -49,6 +55,7 @@ func (c Color) AnalogousHarm(count, slices uint8) []Color {
     i++
   }
 
+  sort.Sort(ColorSlice(ret))
   return ret
 }
 
@@ -70,6 +77,7 @@ func (c Color) MonochromaticHarm(count uint8) []Color {
     i++
   }
 
+  sort.Sort(ColorSlice(ret))
   return ret
 }
 
@@ -95,5 +103,14 @@ func (c Color) SquareHarm() []Color {
     ColorHsv{H: math.Remainder(h.H+90.0, 360.0), S: h.S, V: h.V}.Color(),
     ColorHsv{H: math.Remainder(h.H+180.0, 360.0), S: h.S, V: h.V}.Color(),
     ColorHsv{H: math.Remainder(h.H+270.0, 360.0), S: h.S, V: h.V}.Color(),
+  }
+}
+
+func (c Color) TetradicHarm() []Color {
+  h := c.Hsv()
+  return []Color{c,
+    ColorHsv{H: math.Remainder(h.H+120.0, 360.0), S: h.S, V: h.V}.Color(),
+    ColorHsv{H: math.Remainder(h.H+180.0, 360.0), S: h.S, V: h.V}.Color(),
+    ColorHsv{H: math.Remainder(h.H+300.0, 360.0), S: h.S, V: h.V}.Color(),
   }
 }

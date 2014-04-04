@@ -129,11 +129,6 @@ func (col Color) RGBA255() (r, g, b, a uint8) {
   return
 }
 
-func (c Color) Complement() Color {
-  r, g, b, a := c.RGBA255()
-  return RGBA(^r, ^g, ^b, a)
-}
-
 // DistanceRgb computes the distance between two colors in RGB space.
 // This is not a good measure! Rather do it in Lab space.
 func (c1 Color) DistanceRgb(c2 Color) float64 {
@@ -370,26 +365,21 @@ func (c Color) Hsl() ColorHsl {
     } else {
       s = d / (max + min)
     }
-    switch max {
-    case c.R:
+    if max == c.R {
       if c.G < c.B {
         h = (c.G-c.B)/d + 6.0
       } else {
         h = (c.G - c.B) / d
       }
-      break
-    case c.G:
+    } else if max == c.G {
       h = (c.B-c.R)/d + 2.0
-      break
-    case c.B:
+    } else if max == c.B {
       h = (c.R-c.G)/d + 4.0
-      break
     }
-
     h /= 6.0
   }
 
-  return ColorHsl{H: h, S: s, L: l}
+  return ColorHsl{H: h * 360.0, S: s, L: l}
 }
 
 func (c ColorHsl) Color() Color {
@@ -402,9 +392,10 @@ func (c ColorHsl) Color() Color {
       q = c.L + c.S - c.L*c.S
     }
     p := 2.0*c.L - q
-    r = hue2rgb(p, q, c.H+1.0/3.0)
-    g = hue2rgb(p, q, c.H)
-    b = hue2rgb(p, q, c.H-1.0/3.0)
+    h := c.H / 360.0
+    r = hue2rgb(p, q, h+1.0/3.0)
+    g = hue2rgb(p, q, h)
+    b = hue2rgb(p, q, h-1.0/3.0)
   }
 
   return RGB(uint8(r*255), uint8(g*255), uint8(b*255))
