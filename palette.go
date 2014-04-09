@@ -1,5 +1,9 @@
 package colorful
 
+import (
+  "math"
+)
+
 func (c Color) PaletteTo(targ Color, count int) []Color {
   if count < 3 {
     count = 3
@@ -23,6 +27,10 @@ func (c Color) PaletteTo(targ Color, count int) []Color {
   return colors
 }
 
+///////////////////////////////////////////////////////////////////////////////
+/// HSL colors
+///////////////////////////////////////////////////////////////////////////////
+
 func (c ColorHsl) PaletteToLightness(l float64, count int) []ColorHsl {
   if count < 3 {
     count = 3
@@ -41,9 +49,13 @@ func (c ColorHsl) PaletteToLightness(l float64, count int) []ColorHsl {
   return colors
 }
 
-func (c ColorHsl) PaletteToMaxLightness(count int) []ColorHsl {
-  if c.L > 0.5 {
-    return c.PaletteToLightness(1.0, count)
+func (c ColorHsl) PaletteToLightnessFor(min, max float64, count int) []ColorHsl {
+  if math.Abs(max-c.L) > math.Abs(c.L-min) {
+    return c.PaletteToLightness(max, count)
   }
-  return c.PaletteToLightness(0.0, count)
+  return c.PaletteToLightness(min, count)
+}
+
+func (c ColorHsl) PaletteToMaxLightness(count int) []ColorHsl {
+  return c.PaletteToLightnessFor(0.0, 1.0, count)
 }

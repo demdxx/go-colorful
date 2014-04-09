@@ -47,10 +47,10 @@ func (c Color) AnalogousHarm(count, slices uint8) []Color {
   ret[0] = c
   count--
 
-  h.H = math.Remainder((h.H-(part*float64(1+count)*2))+720.0, 360)
+  h.H = math.Mod((h.H-(part*float64(1+count)*2))+720.0, 360.0)
 
   for ; count > 0; count-- {
-    h.H = math.Remainder(h.H+part, 360.0)
+    h.H = math.Mod(h.H+part, 360.0)
     ret[i] = h.Color()
     i++
   }
@@ -72,7 +72,7 @@ func (c Color) MonochromaticHarm(count uint8) []Color {
   ret[0] = c
 
   for count--; count > 0; count-- {
-    v += math.Remainder(v+modification, 1.0)
+    v += math.Mod(v+modification, 1.0)
     ret[i] = ColorHsv{H: h.H, S: h.S, V: v}.Color()
     i++
   }
@@ -84,33 +84,33 @@ func (c Color) MonochromaticHarm(count uint8) []Color {
 func (c Color) TriadHarm() []Color {
   h := c.Hsv()
   return []Color{
-    ColorHsv{H: math.Remainder(h.H+120.0, 360.0), S: h.S, V: h.V}.Color(), c,
-    ColorHsv{H: math.Remainder(h.H-120.0, 360.0), S: h.S, V: h.V}.Color(),
+    ColorHsv{H: math.Mod(h.H+120.0, 360.0), S: h.S, V: h.V}.Color(), c,
+    ColorHsv{H: math.Mod(h.H-120.0, 360.0), S: h.S, V: h.V}.Color(),
   }
 }
 
 func (c Color) SplitComplementaryHarm() []Color {
   h := c.Hsv()
   return []Color{
-    ColorHsv{H: math.Remainder(h.H+72.0, 360.0), S: h.S, V: h.V}.Color(), c,
-    ColorHsv{H: math.Remainder(h.H-216.0, 360.0), S: h.S, V: h.V}.Color(),
+    ColorHsv{H: math.Mod(h.H+72.0, 360.0), S: h.S, V: h.V}.Color(), c,
+    ColorHsv{H: math.Mod(h.H-216.0, 360.0), S: h.S, V: h.V}.Color(),
   }
 }
 
 func (c Color) SquareHarm() []Color {
   h := c.Hsv()
   return []Color{c,
-    ColorHsv{H: math.Remainder(h.H+90.0, 360.0), S: h.S, V: h.V}.Color(),
-    ColorHsv{H: math.Remainder(h.H+180.0, 360.0), S: h.S, V: h.V}.Color(),
-    ColorHsv{H: math.Remainder(h.H+270.0, 360.0), S: h.S, V: h.V}.Color(),
+    ColorHsv{H: math.Mod(h.H+90.0, 360.0), S: h.S, V: h.V}.Color(),
+    ColorHsv{H: math.Mod(h.H+180.0, 360.0), S: h.S, V: h.V}.Color(),
+    ColorHsv{H: math.Mod(h.H+270.0, 360.0), S: h.S, V: h.V}.Color(),
   }
 }
 
 func (c Color) TetradicHarm() []Color {
   h := c.Hsv()
   return []Color{c,
-    ColorHsv{H: math.Remainder(h.H+120.0, 360.0), S: h.S, V: h.V}.Color(),
-    ColorHsv{H: math.Remainder(h.H+180.0, 360.0), S: h.S, V: h.V}.Color(),
-    ColorHsv{H: math.Remainder(h.H+300.0, 360.0), S: h.S, V: h.V}.Color(),
+    ColorHsv{H: math.Mod(h.H+120.0, 360.0), S: h.S, V: h.V}.Color(),
+    ColorHsv{H: math.Mod(h.H+180.0, 360.0), S: h.S, V: h.V}.Color(),
+    ColorHsv{H: math.Mod(h.H+300.0, 360.0), S: h.S, V: h.V}.Color(),
   }
 }

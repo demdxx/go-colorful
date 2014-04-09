@@ -604,6 +604,43 @@ func (c ColorXyz) Lab() ColorLab {
   // http://www.fredmiranda.com/forum/topic/1035332
   // http://en.wikipedia.org/wiki/Standard_illuminant
   return c.LabWhiteRef(D65)
+
+  // ref_X := 95.047
+  // ref_Y := 100.000
+  // ref_Z := 108.883
+
+  // _X := (c.X * 100.0) / ref_X
+  // _Y := (c.Y * 100.0) / ref_Y
+  // _Z := (c.Z * 100.0) / ref_Z
+
+  // if _X > 0.008856 {
+  //   _X = math.Pow(_X, (1.0 / 3))
+  // } else {
+  //   _X = (7.787 * _X) + (16.0 / 116)
+  // }
+
+  // if _Y > 0.008856 {
+  //   _Y = math.Pow(_Y, (1.0 / 3))
+  // } else {
+  //   _Y = (7.787 * _Y) + (16.0 / 116)
+  // }
+
+  // if _Z > 0.008856 {
+  //   _Z = math.Pow(_Z, (1.0 / 3))
+  // } else {
+  //   _Z = (7.787 * _Z) + (16.0 / 116)
+  // }
+
+  // CIE_L := (116.0 * _Y) - 16.0
+  // CIE_a := 500.0 * (_X - _Y)
+  // CIE_b := 200.0 * (_Y - _Z)
+
+  // c1 := ColorLab{L: CIE_L / 100.0, A: CIE_a / 100.0, B: CIE_b / 100.0}
+  // c2 := c.LabWhiteRef(D65)
+
+  // fmt.Println("...", c1, c2, "\n")
+
+  // return c1
 }
 
 func (c ColorXyz) LabWhiteRef(wref [3]float64) (l ColorLab) {
@@ -692,6 +729,40 @@ func (lab1 ColorLab) Eq(lab2 ColorLab) bool {
 // convert back and forth for that. Here is no conversion.
 func (lab1 ColorLab) Dist(lab2 ColorLab) float64 {
   return math.Sqrt(sq(lab1.L-lab2.L) + sq(lab1.A-lab2.A) + sq(lab1.B-lab2.B))
+}
+
+///////////////////////////////////////////////////////////////////////////////
+/// Hunter-Lab
+///////////////////////////////////////////////////////////////////////////////
+
+type ColorHunterLab struct {
+  L, A, B float64
+}
+
+// http://www.easyrgb.com/index.php?X=MATH&H=05#text5
+func (c ColorXyz) HunterLab() ColorHunterLab {
+  sqY := math.Sqrt(c.Y)
+  L := 10.0 * sqY
+  A := 17.5 * (((1.02 * c.X) - c.Y) / sqY)
+  B := 7.0 * ((c.Y - (0.847 * c.Z)) / sqY)
+  return ColorHunterLab{L: L, A: A, B: B}
+}
+
+func (c Color) HunterLab() ColorHunterLab {
+  return c.Xyz().HunterLab()
+}
+
+// http://www.easyrgb.com/index.php?X=MATH&H=06#text6
+func (c ColorHunterLab) Xyz() ColorXyz {
+  Y := c.L / 10.0
+  X := c.A / 17.5 * c.L / 10.0
+  Z := c.B / 7.0 * c.L / 10.0
+
+  Y *= Y
+  X = (X + Y) / 1.02
+  Z = -(Z - Y) / 0.847
+
+  return ColorXyz{X: X, Y: Y, Z: Z}
 }
 
 ///////////////////////////////////////////////////////////////////////////////

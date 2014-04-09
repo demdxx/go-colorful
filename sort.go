@@ -23,6 +23,5 @@ type ColorSlice []Color
 func (a ColorSlice) Len() int      { return len(a) }
 func (a ColorSlice) Swap(i, j int) { a[i], a[j] = a[j], a[i] }
 func (a ColorSlice) Less(i, j int) bool {
-  c := Color{R: 0, G: 0, B: 0, A: 0}
-  return a[i].DistanceRgb(c) > a[j].DistanceRgb(c)
+  return a[i].Lab().L > a[j].Lab().L
 }
