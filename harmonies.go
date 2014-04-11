@@ -28,11 +28,11 @@ func (c Color) Complement() Color {
   return RGBA(^r, ^g, ^b, a)
 }
 
-func (c Color) ComplementaryHarm() []Color {
-  return []Color{c, c.Complement()}
+func (c Color) ComplementaryHarm() ColorSlice {
+  return ColorSlice([]Color{c, c.Complement()})
 }
 
-func (c Color) AnalogousHarm(count, slices uint8) []Color {
+func (c Color) AnalogousHarm(count, slices uint8) ColorSlice {
   if count < 2 {
     count = 2
   }
@@ -56,10 +56,10 @@ func (c Color) AnalogousHarm(count, slices uint8) []Color {
   }
 
   sort.Sort(ColorSlice(ret))
-  return ret
+  return ColorSlice(ret)
 }
 
-func (c Color) MonochromaticHarm(count uint8) []Color {
+func (c Color) MonochromaticHarm(count uint8) ColorSlice {
   if count < 2 {
     count = 2
   }
@@ -78,10 +78,10 @@ func (c Color) MonochromaticHarm(count uint8) []Color {
   }
 
   sort.Sort(ColorSlice(ret))
-  return ret
+  return ColorSlice(ret)
 }
 
-func (c Color) TriadHarm() []Color {
+func (c Color) TriadHarm() ColorSlice {
   h := c.Hsv()
   return []Color{
     ColorHsv{H: math.Mod(h.H+120.0, 360.0), S: h.S, V: h.V}.Color(), c,
@@ -89,28 +89,28 @@ func (c Color) TriadHarm() []Color {
   }
 }
 
-func (c Color) SplitComplementaryHarm() []Color {
+func (c Color) SplitComplementaryHarm() ColorSlice {
   h := c.Hsv()
-  return []Color{
+  return ColorSlice([]Color{
     ColorHsv{H: math.Mod(h.H+72.0, 360.0), S: h.S, V: h.V}.Color(), c,
     ColorHsv{H: math.Mod(h.H-216.0, 360.0), S: h.S, V: h.V}.Color(),
-  }
+  })
 }
 
-func (c Color) SquareHarm() []Color {
+func (c Color) SquareHarm() ColorSlice {
   h := c.Hsv()
-  return []Color{c,
+  return ColorSlice([]Color{c,
     ColorHsv{H: math.Mod(h.H+90.0, 360.0), S: h.S, V: h.V}.Color(),
     ColorHsv{H: math.Mod(h.H+180.0, 360.0), S: h.S, V: h.V}.Color(),
     ColorHsv{H: math.Mod(h.H+270.0, 360.0), S: h.S, V: h.V}.Color(),
-  }
+  })
 }
 
-func (c Color) TetradicHarm() []Color {
+func (c Color) TetradicHarm() ColorSlice {
   h := c.Hsv()
-  return []Color{c,
+  return ColorSlice([]Color{c,
     ColorHsv{H: math.Mod(h.H+120.0, 360.0), S: h.S, V: h.V}.Color(),
     ColorHsv{H: math.Mod(h.H+180.0, 360.0), S: h.S, V: h.V}.Color(),
     ColorHsv{H: math.Mod(h.H+300.0, 360.0), S: h.S, V: h.V}.Color(),
-  }
+  })
 }
