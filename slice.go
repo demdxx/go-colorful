@@ -23,18 +23,18 @@ type ColorSlice []Color
 func (s ColorSlice) Len() int      { return len(s) }
 func (s ColorSlice) Swap(i, j int) { s[i], s[j] = s[j], s[i] }
 func (s ColorSlice) Less(i, j int) bool {
-	return s[i].Lab().L > s[j].Lab().L
+  return s[i].Lab().L > s[j].Lab().L
 }
 
 func (s ColorSlice) HasMeaning() bool {
-	if len(s) < 2 {
-		return false
-	}
-	old := s[0]
-	for _, c := range s {
-		if old != c {
-			return true
-		}
-	}
-	return false
+  if len(s) < 2 {
+    return false
+  }
+  old := s[0]
+  for _, c := range s {
+    if old != c {
+      return true
+    }
+  }
+  return false
 }

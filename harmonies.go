@@ -59,25 +59,27 @@ func (c Color) AnalogousHarm(count, slices uint8) ColorSlice {
   return ColorSlice(ret)
 }
 
-func (c Color) MonochromaticHarm(count uint8) ColorSlice {
+func (c Color) MonochromaticHarm(count uint8, mod float64) ColorSlice {
   if count < 2 {
     count = 2
   }
 
   i := 1
-  h := c.Hsv()
-  v := h.V
-  modification := 1.0 / float64(count)
+  m := mod / float64(count)
   ret := make([]Color, count)
   ret[0] = c
 
+  r, g, b := (1.0-c.R)*m, (1.0-c.G)*m, (1.0-c.B)*m
+  R, G, B := c.R, c.G, c.B
+
   for count--; count > 0; count-- {
-    v += math.Mod(v+modification, 1.0)
-    ret[i] = ColorHsv{H: h.H, S: h.S, V: v}.Color()
+    R += r
+    G += g
+    B += b
+    ret[i] = Color{R: R, G: G, B: B, A: c.A}
     i++
   }
 
-  sort.Sort(ColorSlice(ret))
   return ColorSlice(ret)
 }
 

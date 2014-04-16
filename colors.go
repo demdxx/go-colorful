@@ -140,6 +140,20 @@ func (col Color) RGBA255() (r, g, b, a uint8) {
   return
 }
 
+func luminance(c uint8, lum float64) uint8 {
+  return uint8(math.Min(math.Max(0, float64(c)+float64(c)*lum), 255))
+}
+
+func (c Color) Luminance(lum float64) Color {
+  r, g, b, a := c.RGBA255()
+
+  r = luminance(r, lum)
+  g = luminance(g, lum)
+  b = luminance(b, lum)
+
+  return RGBA(r, g, b, a)
+}
+
 // DistanceRgb computes the distance between two colors in RGB space.
 // This is not a good measure! Rather do it in Lab space.
 func (c1 Color) DistanceRgb(c2 Color) float64 {
