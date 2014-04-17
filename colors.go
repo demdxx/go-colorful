@@ -116,6 +116,11 @@ func (c Color) String() string {
   return c.RGBAString()
 }
 
+func (c Color) Decimal() int32 {
+  r, g, b := c.RGB255()
+  return (int32(r) << 16) | (int32(g) << 8) | int32(b)
+}
+
 func RGB(r, g, b uint8) Color {
   return Color{float64(r) / 255.0, float64(g) / 255.0, float64(b) / 255.0, 1.0}
 }
