@@ -251,6 +251,23 @@ func (c Color) ClosedWebSafeColor() Color {
   return RGBA(closedRGBColor(r), closedRGBColor(g), closedRGBColor(b), uint8(c.A*255))
 }
 
+func (c Color) Gray() Color {
+  v := (c.R + c.G + c.B) / 3.0
+  return Color{R: v, G: v, B: v, A: c.A}
+}
+
+func (c Color) Red() Color {
+  return Color{R: c.R, G: 0, B: 0, A: c.A}
+}
+
+func (c Color) Green() Color {
+  return Color{R: 0, G: c.G, B: 0, A: c.A}
+}
+
+func (c Color) Blue() Color {
+  return Color{R: 0, G: 0, B: c.B, A: c.A}
+}
+
 ///////////////////////////////////////////////////////////////////////////////
 /// CMYK
 ///////////////////////////////////////////////////////////////////////////////
