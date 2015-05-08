@@ -63,9 +63,9 @@ func Hex(scol string) (Color, error) {
 
   switch len(scol) {
   case 4:
-    format = "#%x%x%x"
+    format = "#%1x%1x%1x"
   case 5:
-    format = "#%x%x%x%x"
+    format = "#%1x%1x%1x%1x"
     count = 4
   case 7:
     format = "#%02x%02x%02x"
@@ -85,6 +85,14 @@ func Hex(scol string) (Color, error) {
   } else {
     n, err = fmt.Sscanf(scol, format, &r, &g, &b)
   }
+
+  if len(scol) < 7 {
+    r |= r << 4
+    g |= g << 4
+    b |= b << 4
+    a |= a << 4
+  }
+
   if err != nil {
     return Color{}, err
   }
